@@ -1,6 +1,6 @@
 // 天气：open-meteo 免费接口，支持 CORS 直连，无需走 shellExec
 (function () {
-  const cfg = window.CONFIG || {};
+  let cfg = window.DW ? window.DW.config() : (window.CONFIG || {});
 
   // WMO weather code -> 中文描述
   const WMO = {
@@ -65,4 +65,10 @@
 
   refresh();
   setInterval(refresh, 30 * 60 * 1000);
+
+  // 设置面板改城市后热更新
+  window.addEventListener('dw-config', (e) => {
+    cfg = e.detail;
+    refresh();
+  });
 })();

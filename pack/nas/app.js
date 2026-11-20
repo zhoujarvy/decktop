@@ -5,9 +5,9 @@
 //  /api/docker/container/ls    -> data[] {Names[], State, Status}
 import * as zebar from 'https://esm.sh/zebar@3';
 
-const cfg = window.CONFIG || {};
+let cfg = window.DW ? window.DW.config() : (window.CONFIG || {});
 const CURL = 'C:\\Windows\\System32\\curl.exe';
-const BASE = `http://${cfg.NAS_HOST || '192.168.0.100'}:9932`;
+let BASE = `http://${cfg.NAS_HOST || '192.168.0.100'}:9932`;
 
 const $ = (id) => document.getElementById(id);
 
@@ -201,9 +201,24 @@ async function pollSlow() {
   } catch { /* 静默，下一轮 */ }
 }
 
-// 在线时 10s 轮询 CPU/内存；离线时改为 30s 探活
-setInterval(() => pollFast(), state.online ? 10 * 1000 : 30 * 1000);
+// CPU/内存轮询（在线离线统一 10s，离线时相当于持续探活）
+setInterval(() => pollFast(), 10 * 1000);
 setInterval(pollSlow, 60 * 1000);
 pollFast().then(() => {
   if (state.online) pollSlow();
+});
+
+// 设置面板改 NAS 配置后热更新
+window.addEventListener('dw-config', (e) => {
+  const changed =
+    e.detail.NAS_HOST !== cfg.NAS_HOST ||
+    e.detail.FNOS_TOKEN !== cfg.FNOS_TOKEN ||
+    JSON.stringify(e.detail.WATCH_CONTAINERS) !== JSON.stringify(cfg.WATCH_CONTAINERS);
+  cfg = e.detail;
+  if (changed) {
+    BASE = `http://${cfg.NAS_HOST || '192.168.0.100'}:9932`;
+    state.online = false;
+    state.offlineSince = null;
+    pollFast();
+  }
 });

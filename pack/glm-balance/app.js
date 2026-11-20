@@ -3,7 +3,7 @@
 //  - GET /api/biz/account/query-customer-account-report  余额（小字）
 import * as zebar from 'https://esm.sh/zebar@3';
 
-const cfg = window.CONFIG || {};
+let cfg = window.DW ? window.DW.config() : (window.CONFIG || {});
 const CURL = 'C:\\Windows\\System32\\curl.exe';
 const BASE = 'https://open.bigmodel.cn';
 
@@ -145,3 +145,17 @@ $('card').addEventListener('click', () => {
 refresh();
 // 不重新拉数据，仅根据已存的 nextReset 每分钟刷新倒计时文字
 countdownTimer = setInterval(renderMeta, 60 * 1000);
+
+// 设置面板换 Key 后热更新
+window.addEventListener('dw-config', (e) => {
+  const newKey = e.detail.GLM_KEY;
+  if (newKey !== cfg.GLM_KEY) {
+    cfg = e.detail;
+    failCount = 0;
+    clearTimeout(timer);
+    $('meta').textContent = '刷新中…';
+    refresh();
+  } else {
+    cfg = e.detail;
+  }
+});

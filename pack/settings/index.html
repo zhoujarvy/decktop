@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="../shared/style.css" />
+  <style>
+    body {
+      overflow-y: auto;
+    }
+    .card {
+      justify-content: flex-start;
+      align-items: stretch;
+      gap: 10px;
+      padding: 16px 18px;
+    }
+    .head {
+      display: flex;
+      align-items: center;
+    }
+    .head .title2 {
+      font-size: 15px;
+      font-weight: 600;
+      flex: 1;
+    }
+    .close-btn {
+      cursor: pointer;
+      color: rgba(230, 236, 245, 0.5);
+      width: 24px;
+      height: 24px;
+      line-height: 22px;
+      text-align: center;
+      border-radius: 6px;
+      user-select: none;
+    }
+    .close-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #f7768e;
+    }
+    .section {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      color: rgba(230, 236, 245, 0.4);
+      margin-top: 4px;
+    }
+    .toggles {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 12px;
+    }
+    .toggles label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: rgba(230, 236, 245, 0.85);
+      cursor: pointer;
+      user-select: none;
+    }
+    .toggles input,
+    .field input {
+      accent-color: #7aa2f7;
+      width: 15px;
+      height: 15px;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .field .name {
+      font-size: 12px;
+      color: rgba(230, 236, 245, 0.6);
+    }
+    .field input[type='text'],
+    .field input[type='password'] {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      color: #e6ecf5;
+      font-size: 13px;
+      padding: 6px 10px;
+      outline: none;
+      font-family: inherit;
+    }
+    .field input:focus {
+      border-color: rgba(122, 162, 247, 0.6);
+    }
+    .row2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .save-btn {
+      margin-top: 4px;
+      cursor: pointer;
+      text-align: center;
+      padding: 8px;
+      border-radius: 8px;
+      font-size: 13px;
+      background: rgba(122, 162, 247, 0.9);
+      color: #10131a;
+      font-weight: 600;
+      user-select: none;
+    }
+    .save-btn:hover {
+      background: #7aa2f7;
+    }
+    .save-btn[disabled] {
+      opacity: 0.5;
+      cursor: wait;
+    }
+    .status {
+      text-align: center;
+      font-size: 12px;
+      min-height: 16px;
+    }
+    .status.ok {
+      color: #9ece6a;
+    }
+    .status.err {
+      color: #f7768e;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="head">
+      <span class="title2">小组件设置</span>
+      <span class="close-btn" id="close" title="关闭">✕</span>
+    </div>
+
+    <div class="section">卡片显示</div>
+    <div class="toggles" id="toggles"></div>
+
+    <div class="section">天气</div>
+    <div class="field">
+      <span class="name">城市（保存时自动解析经纬度）</span>
+      <input type="text" id="city" placeholder="如：广州" />
+    </div>
+
+    <div class="section">GLM</div>
+    <div class="field">
+      <span class="name">API Key（open.bigmodel.cn，格式 id.secret）</span>
+      <input type="password" id="glm-key" placeholder="留空则使用 config.js 默认" />
+    </div>
+
+    <div class="section">NAS（飞牛 + FNOS-API）</div>
+    <div class="row2">
+      <div class="field">
+        <span class="name">地址</span>
+        <input type="text" id="nas-host" placeholder="192.168.0.100" />
+      </div>
+      <div class="field">
+        <span class="name">API Token</span>
+        <input type="password" id="nas-token" placeholder="留空则使用 config.js 默认" />
+      </div>
+    </div>
+    <div class="field">
+      <span class="name">关注容器（逗号分隔，留空显示全部）</span>
+      <input type="text" id="watch" placeholder="如：qinglong,lucky" />
+    </div>
+
+    <div class="save-btn" id="save">保存并应用</div>
+    <div class="status" id="status"></div>
+  </div>
+  <script src="../config.js"></script>
+  <script src="../shared/cards.js"></script>
+  <script src="../shared/boot.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
