@@ -1,9 +1,10 @@
-// 设置面板：卡片开关 / 城市（geocoding 解析）/ GLM Key / NAS 配置
+// 设置面板：语言 / 卡片开关 / 城市（geocoding 解析）/ GLM Key / NAS 配置
 // 保存 -> localStorage(dw.config) -> 各卡片经 storage 事件/轮询热生效
 import * as zebar from 'https://esm.sh/zebar@3';
 
 const LS_KEY = 'dw.config';
 const $ = (id) => document.getElementById(id);
+const t = (key, vars) => window.DW.t(key, vars);
 
 function readUser() {
   try {
@@ -13,12 +14,28 @@ function readUser() {
   }
 }
 
-// ---------- 初始化表单 ----------
-function initForm() {
-  const usr = readUser();
-  const def = window.CONFIG || {};
-  const cardsOn = usr.cards || {};
+// ---------- 多语言 ----------
+let lang = 'zh';
 
+function applyLang() {
+  document.documentElement.lang = lang === 'en' ? 'en' : 'zh-CN';
+  document.querySelectorAll('[data-i18n]').forEach((el) => {
+    el.textContent = t(el.dataset.i18n);
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach((el) => {
+    el.placeholder = t(el.dataset.i18nPh);
+  });
+  $('close').title = t('panel.close');
+  document.querySelectorAll('#lang-row button').forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+  renderToggles();
+}
+
+// ---------- 初始化表单 ----------
+function renderToggles() {
+  const usr = readUser();
+  const cardsOn = usr.cards || {};
   const stackCards = (window.DW_CARDS || []).filter(
     (c) => c.stack !== false && !c.fixed,
   );
@@ -26,9 +43,14 @@ function initForm() {
     .map(
       (c) =>
         `<label><input type="checkbox" data-card="${c.name}" ` +
-        `${cardsOn[c.name] !== false ? 'checked' : ''}/>${c.title}</label>`,
+        `${cardsOn[c.name] !== false ? 'checked' : ''}/>${t('card.' + c.name)}</label>`,
     )
     .join('');
+}
+
+function initForm() {
+  const usr = readUser();
+  const def = window.CONFIG || {};
 
   $('city').value = usr.city || def.CITY || '';
   $('glm-key').value = usr.glmKey ?? def.GLM_KEY ?? '';
@@ -46,10 +68,10 @@ async function resolveCity(city) {
   if (!res.ok) throw new Error(`geocoding HTTP ${res.status}`);
   const data = await res.json();
   if (!data.results || !data.results.length) {
-    throw new Error(`找不到城市“${city}”`);
+    throw new Error(t('geo.notfound', { c: city }));
   }
   const r = data.results[0];
-  return { lat: r.latitude, lon: r.longitude, name: r.name };
+  return { lat: r.latitude, lon: r.longitude };
 }
 
 // ---------- 保存 ----------
@@ -67,7 +89,7 @@ async function save() {
       city !== (before.city || (window.CONFIG || {}).CITY || '');
     if (cityChanged && city) {
       status.className = 'status';
-      status.textContent = '正在解析城市经纬度…';
+      status.textContent = t('status.resolving');
       const geo = await resolveCity(city);
       lat = geo.lat;
       lon = geo.lon;
@@ -80,6 +102,7 @@ async function save() {
 
     const next = {
       ...before,
+      lang,
       cards,
       city,
       glmKey: $('glm-key').value.trim(),
@@ -107,10 +130,12 @@ async function save() {
     }
 
     status.className = 'status ok';
-    status.textContent = '已保存并应用' + (newlyEnabled.length ? `（已打开 ${newlyEnabled.length} 张卡片）` : '');
+    status.textContent = newlyEnabled.length
+      ? t('status.savedOpen', { n: newlyEnabled.length })
+      : t('status.saved');
   } catch (err) {
     status.className = 'status err';
-    status.textContent = `保存失败：${err.message ?? err}`;
+    status.textContent = t('status.fail', { m: err.message ?? err });
   } finally {
     btn.disabled = false;
   }
@@ -121,4 +146,13 @@ $('close').addEventListener('click', () => {
   zebar.currentWidget().close();
 });
 
+document.querySelectorAll('#lang-row button').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    lang = btn.dataset.lang;
+    applyLang();
+  });
+});
+
+lang = readUser().lang || 'zh';
 initForm();
+applyLang();

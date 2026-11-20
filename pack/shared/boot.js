@@ -129,6 +129,21 @@
     }
   }, 3000);
 
+  // ---------- 多语言 ----------
+  function t(key, vars) {
+    var lang = readUser().lang || 'zh';
+    var dict = (window.DW_I18N || {})[lang] || (window.DW_I18N || {}).zh || {};
+    var s = dict[key] !== undefined ? dict[key]
+      : ((window.DW_I18N || {}).zh || {})[key] !== undefined ? window.DW_I18N.zh[key]
+      : key;
+    if (vars) {
+      Object.keys(vars).forEach(function (k) {
+        s = s.split('{' + k + '}').join(String(vars[k]));
+      });
+    }
+    return s;
+  }
+
   // ---------- 暴露给卡片 app ----------
   window.DW = {
     key: LS_KEY,
@@ -136,6 +151,7 @@
     config: mergedConfig,
     userConfig: readUser,
     place: place,
+    t: t,
   };
 
   place();

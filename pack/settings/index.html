@@ -42,6 +42,24 @@
       color: rgba(230, 236, 245, 0.4);
       margin-top: 4px;
     }
+    .lang-row {
+      display: flex;
+      gap: 8px;
+    }
+    .lang-row button {
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      color: rgba(230, 236, 245, 0.7);
+      font-size: 12px;
+      padding: 4px 12px;
+      font-family: inherit;
+    }
+    .lang-row button.active {
+      border-color: #7aa2f7;
+      color: #7aa2f7;
+    }
     .toggles {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -125,46 +143,53 @@
 <body>
   <div class="card">
     <div class="head">
-      <span class="title2">小组件设置</span>
+      <span class="title2" data-i18n="panel.title">小组件设置</span>
       <span class="close-btn" id="close" title="关闭">✕</span>
     </div>
 
-    <div class="section">卡片显示</div>
+    <div class="section" data-i18n="section.lang">界面语言</div>
+    <div class="lang-row" id="lang-row">
+      <button data-lang="zh">中文</button>
+      <button data-lang="en">English</button>
+    </div>
+
+    <div class="section" data-i18n="section.cards">卡片显示</div>
     <div class="toggles" id="toggles"></div>
 
-    <div class="section">天气</div>
+    <div class="section" data-i18n="section.weather">天气</div>
     <div class="field">
-      <span class="name">城市（保存时自动解析经纬度）</span>
-      <input type="text" id="city" placeholder="如：广州" />
+      <span class="name" data-i18n="field.city">城市（保存时自动解析经纬度）</span>
+      <input type="text" id="city" data-i18n-ph="field.city.ph" />
     </div>
 
     <div class="section">GLM</div>
     <div class="field">
-      <span class="name">API Key（open.bigmodel.cn，格式 id.secret）</span>
-      <input type="password" id="glm-key" placeholder="留空则使用 config.js 默认" />
+      <span class="name" data-i18n="field.glmkey">API Key（open.bigmodel.cn，格式 id.secret）</span>
+      <input type="password" id="glm-key" data-i18n-ph="field.glmkey.ph" />
     </div>
 
-    <div class="section">NAS（飞牛 + FNOS-API）</div>
+    <div class="section" data-i18n="section.nas">NAS（飞牛 + FNOS-API）</div>
     <div class="row2">
       <div class="field">
-        <span class="name">地址</span>
-        <input type="text" id="nas-host" placeholder="192.168.0.100" />
+        <span class="name" data-i18n="field.nashost">地址</span>
+        <input type="text" id="nas-host" data-i18n-ph="field.nashost.ph" />
       </div>
       <div class="field">
         <span class="name">API Token</span>
-        <input type="password" id="nas-token" placeholder="留空则使用 config.js 默认" />
+        <input type="password" id="nas-token" data-i18n-ph="field.nastoken.ph" />
       </div>
     </div>
     <div class="field">
-      <span class="name">关注容器（逗号分隔，留空显示全部）</span>
-      <input type="text" id="watch" placeholder="如：qinglong,lucky" />
+      <span class="name" data-i18n="field.watch">关注容器（逗号分隔，留空显示全部）</span>
+      <input type="text" id="watch" data-i18n-ph="field.watch.ph" />
     </div>
 
-    <div class="save-btn" id="save">保存并应用</div>
+    <div class="save-btn" id="save" data-i18n="btn.save">保存并应用</div>
     <div class="status" id="status"></div>
   </div>
   <script src="../config.js"></script>
   <script src="../shared/cards.js"></script>
+  <script src="../shared/i18n.js"></script>
   <script src="../shared/boot.js"></script>
   <script type="module" src="app.js"></script>
 </body>
