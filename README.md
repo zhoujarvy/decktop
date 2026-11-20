@@ -6,6 +6,7 @@ Windows 11 桌面常驻小组件，基于开源框架 [zebar](https://github.com
 
 | 组件 | 数据源 | 刷新 |
 |---|---|---|
+| 本机状态（CPU/内存/网速） | zebar 内置 provider | 2-3s 自动推送 |
 | 时钟 | 本地 | 每秒 |
 | 天气（open-meteo，免 Key） | `api.open-meteo.com` | 30 分钟 |
 | GLM · Code Plan 进度条 | 智谱 `/api/monitor/usage/quota/limit` + `/api/biz/account/query-customer-account-report` | 10 分钟（倒计时每分钟本地刷新，点击卡片手动刷新） |
@@ -19,7 +20,7 @@ D:\project\桌面小组件\
    ├─ zpack.json          ← 窗口位置/尺寸/透明/置底 + shell 命令白名单
    ├─ config.js           ← 密钥配置（gitignore，不提交）
    ├─ config.example.js   ← 配置模板
-   ├─ clock/  weather/  glm-balance/  nas/   ← 各组件 index.html + app.js
+   ├─ system/  clock/  weather/  glm-balance/  nas/   ← 各组件 index.html + app.js
    └─ shared/style.css    ← 统一深色毛玻璃卡片样式
 ```
 

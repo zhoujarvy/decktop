@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="../shared/style.css" />
+  <style>
+    .net {
+      margin-left: auto;
+      font-size: 12px;
+      color: rgba(230, 236, 245, 0.75);
+      white-space: nowrap;
+    }
+    .net .up {
+      color: #9ece6a;
+    }
+    .net .down {
+      color: #7aa2f7;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="title">本机<span class="net" id="net"></span></div>
+    <div class="row"><span class="label">CPU</span><div class="bar"><div id="cpu-bar"></div></div><span class="pct" id="cpu-pct">--</span></div>
+    <div class="row"><span class="label">内存</span><div class="bar"><div id="mem-bar"></div></div><span class="pct" id="mem-pct">--</span></div>
+    <div class="meta" id="meta"></div>
+  </div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
