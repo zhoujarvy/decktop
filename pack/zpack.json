@@ -16,12 +16,20 @@
         {
           "name": "default",
           "anchor": "top_right",
-          "offsetX": "16px",
+          "offsetX": "-16px",
           "offsetY": "16px",
           "width": "340px",
           "height": "100px",
-          "monitorSelection": { "type": "primary" }
+          "monitorSelection": {
+            "type": "primary"
+          }
         }
+      ],
+      "includeFiles": [
+        "*.js",
+        "**/*.html",
+        "**/*.css",
+        "**/*.js"
       ]
     },
     {
@@ -36,12 +44,20 @@
         {
           "name": "default",
           "anchor": "top_right",
-          "offsetX": "16px",
+          "offsetX": "-16px",
           "offsetY": "128px",
           "width": "340px",
           "height": "120px",
-          "monitorSelection": { "type": "primary" }
+          "monitorSelection": {
+            "type": "primary"
+          }
         }
+      ],
+      "includeFiles": [
+        "*.js",
+        "**/*.html",
+        "**/*.css",
+        "**/*.js"
       ]
     },
     {
@@ -64,12 +80,20 @@
         {
           "name": "default",
           "anchor": "top_right",
-          "offsetX": "16px",
+          "offsetX": "-16px",
           "offsetY": "260px",
           "width": "340px",
           "height": "96px",
-          "monitorSelection": { "type": "primary" }
+          "monitorSelection": {
+            "type": "primary"
+          }
         }
+      ],
+      "includeFiles": [
+        "*.js",
+        "**/*.html",
+        "**/*.css",
+        "**/*.js"
       ]
     },
     {
@@ -92,12 +116,20 @@
         {
           "name": "default",
           "anchor": "top_right",
-          "offsetX": "16px",
+          "offsetX": "-16px",
           "offsetY": "368px",
           "width": "340px",
           "height": "220px",
-          "monitorSelection": { "type": "primary" }
+          "monitorSelection": {
+            "type": "primary"
+          }
         }
+      ],
+      "includeFiles": [
+        "*.js",
+        "**/*.html",
+        "**/*.css",
+        "**/*.js"
       ]
     }
   ]

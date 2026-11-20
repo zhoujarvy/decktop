@@ -195,8 +195,8 @@ async function pollFast() {
 async function pollSlow() {
   if (!state.online) return;
   try {
-    // 存储卷：候选端点探测（FNOS-API 实际路径装好后确认）
-    for (const path of ['/api/storage/volumes', '/api/storage/disks', '/api/storage']) {
+    // 存储卷：候选端点探测（响应结构装好后按实测收紧）
+    for (const path of ['/api/storage/overview', '/api/storage/pools']) {
       try {
         const data = await api(path, 8);
         const vols = asArray(data);
@@ -216,7 +216,7 @@ async function pollSlow() {
     }
 
     // Docker 容器存活
-    for (const path of ['/api/docker/containers', '/api/docker/list']) {
+    for (const path of ['/api/docker/container/ls', '/api/docker/containers']) {
       try {
         const data = await api(path, 8);
         let list = asArray(data);
