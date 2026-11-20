@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="../shared/style.css" />
+  <style>
+    .card {
+      justify-content: flex-start;
+      gap: 8px;
+    }
+    .status-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: rgba(230, 236, 245, 0.55);
+      margin-left: auto;
+    }
+    .services {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 10px;
+      font-size: 12px;
+    }
+    .services .svc {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: rgba(230, 236, 245, 0.8);
+    }
+    .services .svc .dot {
+      width: 6px;
+      height: 6px;
+    }
+    .storage-name {
+      font-size: 11px;
+      color: rgba(230, 236, 245, 0.55);
+      margin-right: auto;
+    }
+    .storage-size {
+      font-size: 11px;
+      color: rgba(230, 236, 245, 0.55);
+    }
+    .guide {
+      font-size: 12px;
+      line-height: 1.6;
+      color: rgba(230, 236, 245, 0.6);
+    }
+    .guide a {
+      color: #7aa2f7;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="card" id="card">
+    <div class="title">
+      <span class="dot off" id="dot"></span>NAS · fnOS
+      <span class="status-line" id="status">初始化…</span>
+    </div>
+    <div id="body">
+      <div class="row"><span class="label">CPU</span><div class="bar"><div id="cpu-bar"></div></div><span class="pct" id="cpu-pct">--</span></div>
+      <div class="row"><span class="label">内存</span><div class="bar"><div id="mem-bar"></div></div><span class="pct" id="mem-pct">--</span></div>
+      <div id="storage"></div>
+      <div class="services" id="services"></div>
+      <div class="meta" id="meta"></div>
+    </div>
+    <div class="guide" id="guide" style="display:none"></div>
+  </div>
+  <script src="../config.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

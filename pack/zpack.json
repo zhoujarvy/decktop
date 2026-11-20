@@ -1,0 +1,104 @@
+{
+  "$schema": "https://raw.githubusercontent.com/glzr-io/zebar/main/resources/zpack-schema.json",
+  "name": "desktop-widgets",
+  "version": "0.1.0",
+  "description": "个人桌面小组件：时钟、天气、GLM 余额、NAS 状态",
+  "widgets": [
+    {
+      "name": "clock",
+      "htmlPath": "clock/index.html",
+      "zOrder": "bottom_most",
+      "shownInTaskbar": false,
+      "focused": false,
+      "resizable": false,
+      "transparent": true,
+      "presets": [
+        {
+          "name": "default",
+          "anchor": "top_right",
+          "offsetX": "16px",
+          "offsetY": "16px",
+          "width": "340px",
+          "height": "100px",
+          "monitorSelection": { "type": "primary" }
+        }
+      ]
+    },
+    {
+      "name": "weather",
+      "htmlPath": "weather/index.html",
+      "zOrder": "bottom_most",
+      "shownInTaskbar": false,
+      "focused": false,
+      "resizable": false,
+      "transparent": true,
+      "presets": [
+        {
+          "name": "default",
+          "anchor": "top_right",
+          "offsetX": "16px",
+          "offsetY": "128px",
+          "width": "340px",
+          "height": "120px",
+          "monitorSelection": { "type": "primary" }
+        }
+      ]
+    },
+    {
+      "name": "glm-balance",
+      "htmlPath": "glm-balance/index.html",
+      "zOrder": "bottom_most",
+      "shownInTaskbar": false,
+      "focused": false,
+      "resizable": false,
+      "transparent": true,
+      "privileges": {
+        "shellCommands": [
+          {
+            "program": "C:\\Windows\\System32\\curl.exe",
+            "argsRegex": "^-s -m [0-9]+ -H Authorization: Bearer [A-Za-z0-9_.=-]+ https://open\\.bigmodel\\.cn/api/paas/v4/users/balance_info$"
+          }
+        ]
+      },
+      "presets": [
+        {
+          "name": "default",
+          "anchor": "top_right",
+          "offsetX": "16px",
+          "offsetY": "260px",
+          "width": "340px",
+          "height": "96px",
+          "monitorSelection": { "type": "primary" }
+        }
+      ]
+    },
+    {
+      "name": "nas",
+      "htmlPath": "nas/index.html",
+      "zOrder": "bottom_most",
+      "shownInTaskbar": false,
+      "focused": false,
+      "resizable": false,
+      "transparent": true,
+      "privileges": {
+        "shellCommands": [
+          {
+            "program": "C:\\Windows\\System32\\curl.exe",
+            "argsRegex": "^-s -m [0-9]+ -H Authorization: Bearer \\S+ http://192\\.168\\.0\\.100:9932/api/[a-zA-Z0-9/_-]+$"
+          }
+        ]
+      },
+      "presets": [
+        {
+          "name": "default",
+          "anchor": "top_right",
+          "offsetX": "16px",
+          "offsetY": "368px",
+          "width": "340px",
+          "height": "220px",
+          "monitorSelection": { "type": "primary" }
+        }
+      ]
+    }
+  ]
+}

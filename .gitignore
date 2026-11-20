@@ -1,0 +1,6 @@
+# 真实密钥不入库
+pack/config.js
+
+# 系统文件
+Thumbs.db
+Desktop.ini
