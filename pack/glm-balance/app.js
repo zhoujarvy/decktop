@@ -1,102 +1,137 @@
-// GLM 余额：Web Crypto 现签 JWT -> zebar.shellExec 调系统 curl -> 解析余额
+// GLM Code Plan 用量进度条 + 余额：
+//  - GET /api/monitor/usage/quota/limit                  额度池（TOKENS_LIMIT = Code Plan 窗口）
+//  - GET /api/biz/account/query-customer-account-report  余额（小字）
 import * as zebar from 'https://esm.sh/zebar@3';
 
 const cfg = window.CONFIG || {};
 const CURL = 'C:\\Windows\\System32\\curl.exe';
-const BALANCE_URL = 'https://open.bigmodel.cn/api/paas/v4/users/balance_info';
+const BASE = 'https://open.bigmodel.cn';
 
 const $ = (id) => document.getElementById(id);
 
-// ---------- JWT HS256 自签（智谱 Key 格式 "{id}.{secret}"） ----------
-function b64url(buf) {
-  let bin = '';
-  for (const byte of new Uint8Array(buf)) bin += String.fromCharCode(byte);
-  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-}
-
-async function signJwt(apiKey) {
-  const dot = apiKey.indexOf('.');
-  const id = apiKey.slice(0, dot);
-  const secret = apiKey.slice(dot + 1);
-  const now = Math.floor(Date.now() / 1000);
-
-  const enc = (obj) =>
-    b64url(new TextEncoder().encode(JSON.stringify(obj)));
-  const header = enc({ alg: 'HS256', sign_type: 'SIGN' });
-  const payload = enc({ api_key: id, exp: now + 1800, timestamp: now });
-
-  const key = await crypto.subtle.importKey(
-    'raw',
-    new TextEncoder().encode(secret),
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign'],
-  );
-  const sig = b64url(
-    await crypto.subtle.sign(
-      'HMAC',
-      key,
-      new TextEncoder().encode(`${header}.${payload}`),
-    ),
-  );
-  return `${header}.${payload}.${sig}`;
-}
-
-// ---------- 刷新调度：成功 30min，失败退避 1/5/15min ----------
 const BACKOFF = [1, 5, 15];
 let failCount = 0;
 let timer = null;
+let countdownTimer = null;
+
+// 进度条对应的额度池状态
+const pool = { label: null, usedPct: null, remainingText: null, nextReset: null };
 
 function schedule(ms) {
   clearTimeout(timer);
   timer = setTimeout(refresh, ms);
 }
 
-function hhmm() {
-  const d = new Date();
+function hhmm(ts) {
+  const d = ts ? new Date(ts) : new Date();
   return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+}
+
+async function api(path) {
+  const out = await zebar.shellExec(CURL, [
+    '-s', '-m', '15',
+    '-H', `Authorization: Bearer ${cfg.GLM_KEY}`,
+    `${BASE}${path}`,
+  ]);
+  if (out.code !== 0) throw new Error(`curl exit ${out.code}`);
+  const json = JSON.parse(out.stdout);
+  if (!json.success && json.code !== 200) {
+    throw new Error(json.msg || `code ${json.code}`);
+  }
+  return json.data;
+}
+
+// 额度池单位：1=天 3=小时 5=月 6=周
+const UNIT = { 1: '天', 3: '小时', 5: '月', 6: '周' };
+
+function barColor(pct) {
+  return pct >= 90 ? 'err' : pct >= 75 ? 'warn' : '';
+}
+
+function renderBar() {
+  if (pool.usedPct === null) {
+    $('usage-bar').style.width = '0';
+    $('usage-bar').className = '';
+    $('usage-pct').textContent = '--%';
+    return;
+  }
+  $('usage-bar').style.width = `${Math.min(pool.usedPct, 100)}%`;
+  $('usage-bar').className = barColor(pool.usedPct);
+  $('usage-pct').textContent = `${Math.round(pool.usedPct)}%`;
+  $('usage-pct').className = `pct ${barColor(pool.usedPct)}`.trim();
+}
+
+function renderMeta() {
+  const parts = [];
+  if (pool.label) parts.push(pool.label);
+  if (pool.remainingText) parts.push(pool.remainingText);
+  if (pool.nextReset) {
+    const left = pool.nextReset - Date.now();
+    if (left > 0) {
+      const mins = Math.round(left / 60000);
+      parts.push(mins >= 60
+        ? `${Math.floor(mins / 60)}时${mins % 60}分后重置（${hhmm(pool.nextReset)}）`
+        : `${mins}分后重置（${hhmm(pool.nextReset)}）`);
+    } else {
+      parts.push(`${hhmm(pool.nextReset)} 重置`);
+    }
+  }
+  if (parts.length) $('meta').textContent = parts.join(' · ');
+}
+
+function pickPool(limits) {
+  const list = Array.isArray(limits) ? limits : [];
+  const p = list.find((l) => l.type === 'TOKENS_LIMIT') ??
+    list.find((l) => l.type === 'TIME_LIMIT');
+  pool.label = null;
+  pool.usedPct = null;
+  pool.remainingText = null;
+  pool.nextReset = null;
+  if (!p) return;
+
+  pool.label = `${p.number}${UNIT[p.unit] ?? ''}窗口`;
+  if (typeof p.percentage === 'number') {
+    pool.usedPct = p.percentage;
+  }
+  if (typeof p.remaining === 'number' && typeof p.usage === 'number') {
+    pool.remainingText = `剩 ${p.remaining}/${p.usage}`;
+  } else if (Array.isArray(p.usageDetails) && p.usageDetails.length) {
+    pool.remainingText = null; // 明细太长，进度条已够直观
+  }
+  if (typeof p.nextResetTime === 'number' && p.nextResetTime > 1e12) {
+    pool.nextReset = p.nextResetTime;
+  }
 }
 
 async function refresh() {
   if (!cfg.GLM_KEY) {
-    $('balance').textContent = '--';
     $('meta').textContent = '未配置：请在 pack/config.js 填 GLM_KEY';
     schedule(60 * 1000);
     return;
   }
 
   try {
-    const token = await signJwt(cfg.GLM_KEY);
-    const out = await zebar.shellExec(CURL, [
-      '-s', '-m', '15',
-      '-H', `Authorization: Bearer ${token}`,
-      BALANCE_URL,
+    const [quota, account] = await Promise.all([
+      api('/api/monitor/usage/quota/limit'),
+      api('/api/biz/account/query-customer-account-report').catch(() => null),
     ]);
 
-    let json;
-    try {
-      json = JSON.parse(out.stdout);
-    } catch {
-      throw new Error(out.stderr?.slice(0, 80) || '响应不是 JSON');
+    pickPool(quota?.limits);
+    renderBar();
+    renderMeta();
+
+    if (account) {
+      const avail = Number(account.availableBalance ?? account.balance ?? 0);
+      $('balance').textContent = `余额 ¥${avail.toFixed(2)}`;
     }
 
-    // 响应结构做防御式解析
-    const info = json.balanceInfo ?? json.data?.balanceInfo ?? json;
-    const balance = info.totalBalance ?? info.total_balance;
-    if (balance === undefined) throw new Error('未找到余额字段');
-
-    const unit = info.measureUnit === 'tokens' ? ' tokens' : ' 元';
-    $('balance').innerHTML =
-      `${Number(balance).toFixed(2)}<span class="unit">${unit}</span>`;
-    $('meta').textContent = `刷新于 ${hhmm()} · 点击手动刷新`;
-
     failCount = 0;
-    schedule(30 * 60 * 1000);
+    schedule(10 * 60 * 1000);
   } catch (err) {
     failCount++;
     const wait = BACKOFF[Math.min(failCount, BACKOFF.length) - 1];
     $('meta').textContent =
-      `请求失败(${String(err).slice(0, 60)}) · ${wait}min 后重试`;
+      `请求失败(${String(err.message ?? err).slice(0, 60)}) · ${wait}min 后重试`;
     schedule(wait * 60 * 1000);
   }
 }
@@ -108,3 +143,5 @@ $('card').addEventListener('click', () => {
 });
 
 refresh();
+// 不重新拉数据，仅根据已存的 nextReset 每分钟刷新倒计时文字
+countdownTimer = setInterval(renderMeta, 60 * 1000);

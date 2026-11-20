@@ -3,11 +3,43 @@
 <head>
   <meta charset="utf-8" />
   <link rel="stylesheet" href="../shared/style.css" />
+  <style>
+    .balance-mini {
+      margin-left: auto;
+      font-size: 13px;
+      color: rgba(230, 236, 245, 0.75);
+    }
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 2px 0;
+    }
+    .bar-row .bar {
+      flex: 1;
+      height: 8px;
+      border-radius: 4px;
+    }
+    .bar-row .pct {
+      font-size: 16px;
+      font-weight: 600;
+      min-width: 46px;
+      text-align: right;
+    }
+    .meta {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  </style>
 </head>
 <body>
   <div class="card clickable" id="card" title="点击立即刷新">
-    <div class="title">GLM 余额</div>
-    <div class="value" id="balance">--<span class="unit" id="unit"></span></div>
+    <div class="title">GLM · Code Plan<span class="balance-mini" id="balance"></span></div>
+    <div class="bar-row">
+      <div class="bar"><div id="usage-bar"></div></div>
+      <span class="pct" id="usage-pct">--%</span>
+    </div>
     <div class="meta" id="meta">加载中…</div>
   </div>
   <script src="../config.js"></script>

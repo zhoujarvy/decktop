@@ -72,7 +72,7 @@
         "shellCommands": [
           {
             "program": "C:\\Windows\\System32\\curl.exe",
-            "argsRegex": "^-s -m [0-9]+ -H Authorization: Bearer [A-Za-z0-9_.=-]+ https://open\\.bigmodel\\.cn/api/paas/v4/users/balance_info$"
+            "argsRegex": "^-s -m [0-9]+ -H Authorization: Bearer [A-Za-z0-9._-]+ https://open\\.bigmodel\\.cn/api/(biz/account/query-customer-account-report|monitor/usage/quota/limit)$"
           }
         ]
       },
@@ -83,7 +83,7 @@
           "offsetX": "-16px",
           "offsetY": "260px",
           "width": "340px",
-          "height": "96px",
+          "height": "108px",
           "monitorSelection": {
             "type": "primary"
           }
@@ -117,9 +117,9 @@
           "name": "default",
           "anchor": "top_right",
           "offsetX": "-16px",
-          "offsetY": "368px",
+          "offsetY": "380px",
           "width": "340px",
-          "height": "220px",
+          "height": "208px",
           "monitorSelection": {
             "type": "primary"
           }
