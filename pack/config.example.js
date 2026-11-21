@@ -7,7 +7,7 @@ window.CONFIG = {
   FNOS_TOKEN: '',
 
   // NAS 上 FNOS-API 的地址（不含结尾斜杠）
-  NAS_HOST: '192.168.0.100',
+  NAS_HOST: '192.168.1.100',
 
   // 天气城市与经纬度（当前：广州）
   CITY: '广州',

@@ -11,7 +11,7 @@ window.DW_CARDS = [
   { "name": "calendar",     "title": "日历",     "height": 240 },
   { "name": "weather",      "title": "天气",     "height": 144 },
   { "name": "glm-balance",  "title": "GLM 用量", "height": 116, "shell": "glm" },
-  { "name": "nas",          "title": "NAS 状态", "height": 208, "shell": "nas" },
-  { "name": "settings-bar", "title": "设置入口", "height": 36,  "fixed": true, "shell": "settings-launcher" },
+  { "name": "nas",          "title": "NAS 状态", "height": 176, "shell": "nas" },
+  { "name": "settings-bar", "title": "设置入口", "height": 36,  "fixed": true },
   { "name": "settings",     "title": "设置面板", "height": 640, "stack": false }
 ];

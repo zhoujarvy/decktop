@@ -8,7 +8,7 @@ const zebar = window.ZEBAR;
 
 let cfg = window.DW ? window.DW.config() : (window.CONFIG || {});
 const CURL = 'C:\\Windows\\System32\\curl.exe';
-let BASE = `http://${cfg.NAS_HOST || '192.168.0.100'}:9932`;
+let BASE = `http://${cfg.NAS_HOST || '192.168.1.100'}:9932`;
 
 const $ = (id) => document.getElementById(id);
 
@@ -217,7 +217,7 @@ window.addEventListener('dw-config', (e) => {
     JSON.stringify(e.detail.WATCH_CONTAINERS) !== JSON.stringify(cfg.WATCH_CONTAINERS);
   cfg = e.detail;
   if (changed) {
-    BASE = `http://${cfg.NAS_HOST || '192.168.0.100'}:9932`;
+    BASE = `http://${cfg.NAS_HOST || '192.168.1.100'}:9932`;
     state.online = false;
     state.offlineSince = null;
     pollFast();

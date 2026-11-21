@@ -25,7 +25,7 @@
     return {
       GLM_KEY: usr.glmKey !== undefined ? usr.glmKey : (def.GLM_KEY || ''),
       FNOS_TOKEN: usr.nasToken !== undefined ? usr.nasToken : (def.FNOS_TOKEN || ''),
-      NAS_HOST: usr.nasHost || def.NAS_HOST || '192.168.0.100',
+      NAS_HOST: usr.nasHost || def.NAS_HOST || '192.168.1.100',
       CITY: usr.city || def.CITY || '',
       LAT: usr.lat !== undefined ? usr.lat : def.LAT,
       LON: usr.lon !== undefined ? usr.lon : def.LON,
@@ -253,18 +253,18 @@
     var z = window.ZEBAR;
     if (!z) return Promise.reject(new Error('no ZEBAR'));
     var p1 = z.rawInvoke('start_widget_preset', {
-      pack_id: 'desktop-widgets',
+      pack_id: 'decktop',
       widget_name: name,
       preset_name: 'default',
       is_preview: false,
     });
     var p2 = z.rawInvoke('start_widget_preset', {
-      packId: 'desktop-widgets',
+      packId: 'decktop',
       widgetName: name,
       presetName: 'default',
       isPreview: false,
     });
-    var p3 = z.startWidgetPreset('desktop-widgets', name, 'default', false);
+    var p3 = z.startWidgetPreset('decktop', name, 'default', false);
     return p1.catch(function () { return p2; }).catch(function () { return p3; });
   }
 

@@ -142,7 +142,7 @@ async function save() {
       ...before,
       city,
       glmKey: $('glm-key').value.trim(),
-      nasHost: $('nas-host').value.trim() || '192.168.0.100',
+      nasHost: $('nas-host').value.trim() || '192.168.1.100',
       nasToken: $('nas-token').value.trim(),
       watch: $('watch').value
         .split(/[,，]/)

@@ -30,14 +30,6 @@ SHELL_TEMPLATES = {
             'https?://[a-zA-Z0-9.-]+:9932/api/[a-zA-Z0-9/_-]+$'
         ),
     },
-    # 设置入口用 CLI 拉起设置面板（固定参数整串锚定，无注入面）
-    'settings-launcher': {
-        'program': 'C:\\Program Files\\glzr.io\\Zebar\\zebar.exe',
-        'argsRegex': (
-            '^start-widget-preset --pack desktop-widgets '
-            '--widget-name settings --preset default$'
-        ),
-    },
 }
 
 TOP = 16
@@ -93,7 +85,7 @@ def build():
 
     pack = {
         '$schema': 'https://raw.githubusercontent.com/glzr-io/zebar/main/resources/zpack-schema.json',
-        'name': 'desktop-widgets',
+        'name': 'decktop',
         'version': '0.2.0',
         'description': '个人桌面小组件：本机/时钟/日历/天气/GLM/NAS（插件化，可视化配置）',
         'widgets': widgets,

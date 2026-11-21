@@ -1,4 +1,6 @@
-# Desktop Widgets（zebar 桌面小组件套件）
+# Decktop
+
+> Windows 11 桌面小组件套件：一叠贴在桌面上的毛玻璃卡片。基于 [zebar](https://github.com/glzr-io/zebar) v3.3.1。
 
 Windows 11 桌面常驻小组件，基于开源框架 [zebar](https://github.com/glzr-io/zebar) v3.3.1。
 贴桌面置底、深色毛玻璃卡片风、插件化卡片注册表、可视化设置面板（中英双语）、卡片可拖动磁吸排列。
@@ -26,7 +28,7 @@ Windows 11 桌面常驻小组件，基于开源框架 [zebar](https://github.com
 ## 目录结构
 
 ```
-├─ pack/                      ← junction 映射到 ~/.glzr/zebar/desktop-widgets
+├─ pack/                      ← junction 映射到 ~/.glzr/zebar/decktop
 │  ├─ zpack.json              ← 构建产物（勿手改）
 │  ├─ config.js               ← 出厂默认值（gitignore，含密钥）
 │  ├─ config.example.js       ← 配置模板
@@ -74,7 +76,7 @@ npx esbuild entry.mjs --bundle --minify --format=iife --outfile=../pack/shared/z
 换机器部署：
 
 ```bat
-mklink /J "%USERPROFILE%\.glzr\zebar\desktop-widgets" "<repo>\pack"
+mklink /J "%USERPROFILE%\.glzr\zebar\decktop" "<repo>\pack"
 ```
 
 ## 踩坑记录（重要，都是实测踩出来的）

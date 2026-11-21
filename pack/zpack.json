@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/glzr-io/zebar/main/resources/zpack-schema.json",
-  "name": "desktop-widgets",
+  "name": "decktop",
   "version": "0.2.0",
   "description": "个人桌面小组件：本机/时钟/日历/天气/GLM/NAS（插件化，可视化配置）",
   "widgets": [
@@ -167,7 +167,7 @@
           "offsetX": "-16px",
           "offsetY": "788px",
           "width": "340px",
-          "height": "208px",
+          "height": "176px",
           "monitorSelection": {
             "type": "primary"
           }
@@ -201,7 +201,7 @@
           "name": "default",
           "anchor": "top_right",
           "offsetX": "-16px",
-          "offsetY": "1008px",
+          "offsetY": "976px",
           "width": "340px",
           "height": "36px",
           "monitorSelection": {
@@ -214,15 +214,7 @@
         "**/*.html",
         "**/*.css",
         "**/*.js"
-      ],
-      "privileges": {
-        "shellCommands": [
-          {
-            "program": "C:\\Program Files\\glzr.io\\Zebar\\zebar.exe",
-            "argsRegex": "^start-widget-preset --pack desktop-widgets --widget-name settings --preset default$"
-          }
-        ]
-      }
+      ]
     },
     {
       "name": "settings",
