@@ -1,18 +1,27 @@
 // 日历卡：月历网格（周一起）+ 今日高亮 + 今日农历 + 翻月
 // 农历换算使用内置 solarlunar（ISC 许可，见 README）
 (function () {
-  var sl = window.solarLunar;
+  // UMD 导出挂在 default 下（tslib 风格），做两种形态兼容
+  var sl = window.solarLunar
+    ? (window.solarLunar.default || window.solarLunar)
+    : null;
   var today = new Date();
   // 当前查看的年月
   var view = { y: today.getFullYear(), m: today.getMonth() };
 
   function $(id) { return document.getElementById(id); }
 
+  function lunarTodayText() {
+    if (!sl || typeof sl.solar2lunar !== 'function') {
+      return '';
+    }
+    var r = sl.solar2lunar(today.getFullYear(), today.getMonth() + 1, today.getDate());
+    return '农历' + r.gzYear + r.animal + '年 · ' + (r.isLeap ? '闰' : '') + r.monthCn + r.dayCn;
+  }
+
   function renderHead() {
     $('month').textContent = view.y + '年' + (view.m + 1) + '月';
-    var r = sl.solar2lunar(today.getFullYear(), today.getMonth() + 1, today.getDate());
-    $('lunar-today').textContent =
-      '农历' + r.gzYear + r.animal + '年 · ' + (r.isLeap ? '闰' : '') + r.monthCn + r.dayCn;
+    $('lunar-today').textContent = lunarTodayText();
   }
 
   function renderGrid() {

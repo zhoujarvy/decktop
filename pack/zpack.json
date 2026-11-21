@@ -75,7 +75,7 @@
           "offsetX": "-16px",
           "offsetY": "252px",
           "width": "340px",
-          "height": "220px",
+          "height": "240px",
           "monitorSelection": {
             "type": "primary"
           }
@@ -101,7 +101,7 @@
           "name": "default",
           "anchor": "top_right",
           "offsetX": "-16px",
-          "offsetY": "484px",
+          "offsetY": "504px",
           "width": "340px",
           "height": "120px",
           "monitorSelection": {
@@ -129,7 +129,7 @@
           "name": "default",
           "anchor": "top_right",
           "offsetX": "-16px",
-          "offsetY": "616px",
+          "offsetY": "636px",
           "width": "340px",
           "height": "108px",
           "monitorSelection": {
@@ -165,7 +165,7 @@
           "name": "default",
           "anchor": "top_right",
           "offsetX": "-16px",
-          "offsetY": "736px",
+          "offsetY": "756px",
           "width": "340px",
           "height": "208px",
           "monitorSelection": {
@@ -201,7 +201,7 @@
           "name": "default",
           "anchor": "top_right",
           "offsetX": "-16px",
-          "offsetY": "956px",
+          "offsetY": "976px",
           "width": "340px",
           "height": "36px",
           "monitorSelection": {
