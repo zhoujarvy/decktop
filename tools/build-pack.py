@@ -30,6 +30,14 @@ SHELL_TEMPLATES = {
             'https?://[a-zA-Z0-9.-]+:9932/api/[a-zA-Z0-9/_-]+$'
         ),
     },
+    # 设置入口用 CLI 拉起设置面板（固定参数整串锚定，无注入面）
+    'settings-launcher': {
+        'program': 'C:\\Program Files\\glzr.io\\Zebar\\zebar.exe',
+        'argsRegex': (
+            '^start-widget-preset --pack desktop-widgets '
+            '--widget-name settings --preset default$'
+        ),
+    },
 }
 
 TOP = 16

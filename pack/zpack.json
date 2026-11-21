@@ -214,7 +214,15 @@
         "**/*.html",
         "**/*.css",
         "**/*.js"
-      ]
+      ],
+      "privileges": {
+        "shellCommands": [
+          {
+            "program": "C:\\Program Files\\glzr.io\\Zebar\\zebar.exe",
+            "argsRegex": "^start-widget-preset --pack desktop-widgets --widget-name settings --preset default$"
+          }
+        ]
+      }
     },
     {
       "name": "settings",
