@@ -78,14 +78,11 @@ function renderTimeBar() {
   $('time-bar').className = barColor(pct);
 
   const left = pool.nextReset - Date.now();
-  if (left > 0) {
-    const mins = Math.round(left / 60000);
-    $('time-label').textContent = mins >= 60
-      ? `${Math.floor(mins / 60)}时${mins % 60}分`
-      : `${mins}分`;
-  } else {
-    $('time-label').textContent = '0分';
-  }
+  const totalMins = Math.max(0, Math.round(left / 60000));
+  const h = Math.floor(totalMins / 60);
+  const m = totalMins % 60;
+  // 冒号格式：2:27 / 0:45，宽度稳定更紧凑
+  $('time-label').textContent = `${h}:${String(m).padStart(2, '0')}`;
 }
 
 // 底部信息行：重置时间 + 窗口说明

@@ -131,7 +131,7 @@
           "offsetX": "-16px",
           "offsetY": "660px",
           "width": "340px",
-          "height": "108px",
+          "height": "116px",
           "monitorSelection": {
             "type": "primary"
           }
@@ -165,7 +165,7 @@
           "name": "default",
           "anchor": "top_right",
           "offsetX": "-16px",
-          "offsetY": "780px",
+          "offsetY": "788px",
           "width": "340px",
           "height": "208px",
           "monitorSelection": {
@@ -201,7 +201,7 @@
           "name": "default",
           "anchor": "top_right",
           "offsetX": "-16px",
-          "offsetY": "1000px",
+          "offsetY": "1008px",
           "width": "340px",
           "height": "36px",
           "monitorSelection": {
