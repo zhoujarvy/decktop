@@ -65,7 +65,7 @@ function renderUsageBar() {
   $('usage-pct').className = `pct ${barColor(pool.usedPct)}`.trim();
 }
 
-// 时间进度条：本窗口已流逝比例（快到重置点时变色）
+// 时间进度条：本窗口已流逝比例（快到重置点时变色），尾部显示倒计时
 function renderTimeBar() {
   if (!pool.nextReset || !pool.windowMs) {
     $('time-bar').style.width = '0';
@@ -80,16 +80,18 @@ function renderTimeBar() {
   const left = pool.nextReset - Date.now();
   if (left > 0) {
     const mins = Math.round(left / 60000);
-    $('time-label').textContent = (mins >= 60
+    $('time-label').textContent = mins >= 60
       ? `${Math.floor(mins / 60)}时${mins % 60}分`
-      : `${mins}分`) + `后重置 ${hhmm(pool.nextReset)}`;
+      : `${mins}分`;
   } else {
-    $('time-label').textContent = `${hhmm(pool.nextReset)} 重置`;
+    $('time-label').textContent = '0分';
   }
 }
 
+// 底部信息行：重置时间 + 窗口说明
 function renderMeta() {
   const parts = [];
+  if (pool.nextReset) parts.push(`重置于 ${hhmm(pool.nextReset)}`);
   if (pool.label) parts.push(pool.label);
   if (pool.remainingText) parts.push(pool.remainingText);
   if (parts.length) $('meta').textContent = parts.join(' · ');
