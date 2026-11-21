@@ -1,4 +1,4 @@
-// GLM Code Plan 用量进度条 + 余额：
+// GLM Code Plan 双进度条：用量（5小时窗口）+ 时间（窗口剩余）
 //  - GET /api/monitor/usage/quota/limit                  额度池（TOKENS_LIMIT = Code Plan 窗口）
 //  - GET /api/biz/account/query-customer-account-report  余额（小字）
 // zebar 客户端 API 来自本地打包（shared/zebar.bundle.js），无外网依赖
@@ -16,7 +16,10 @@ let timer = null;
 let countdownTimer = null;
 
 // 进度条对应的额度池状态
-const pool = { label: null, usedPct: null, remainingText: null, nextReset: null };
+const pool = {
+  label: null, usedPct: null, remainingText: null,
+  nextReset: null, windowMs: null,
+};
 
 function schedule(ms) {
   clearTimeout(timer);
@@ -43,13 +46,13 @@ async function api(path) {
 }
 
 // 额度池单位：1=天 3=小时 5=月 6=周
-const UNIT = { 1: '天', 3: '小时', 5: '月', 6: '周' };
+const UNIT_MS = { 1: 86400e3, 3: 3600e3, 5: 30 * 86400e3, 6: 7 * 86400e3 };
 
 function barColor(pct) {
   return pct >= 90 ? 'err' : pct >= 75 ? 'warn' : '';
 }
 
-function renderBar() {
+function renderUsageBar() {
   if (pool.usedPct === null) {
     $('usage-bar').style.width = '0';
     $('usage-bar').className = '';
@@ -62,21 +65,33 @@ function renderBar() {
   $('usage-pct').className = `pct ${barColor(pool.usedPct)}`.trim();
 }
 
+// 时间进度条：本窗口已流逝比例（快到重置点时变色）
+function renderTimeBar() {
+  if (!pool.nextReset || !pool.windowMs) {
+    $('time-bar').style.width = '0';
+    $('time-label').textContent = '';
+    return;
+  }
+  const elapsed = pool.windowMs - (pool.nextReset - Date.now());
+  const pct = Math.max(0, Math.min(100, (elapsed / pool.windowMs) * 100));
+  $('time-bar').style.width = `${pct}%`;
+  $('time-bar').className = barColor(pct);
+
+  const left = pool.nextReset - Date.now();
+  if (left > 0) {
+    const mins = Math.round(left / 60000);
+    $('time-label').textContent = (mins >= 60
+      ? `${Math.floor(mins / 60)}时${mins % 60}分`
+      : `${mins}分`) + `后重置 ${hhmm(pool.nextReset)}`;
+  } else {
+    $('time-label').textContent = `${hhmm(pool.nextReset)} 重置`;
+  }
+}
+
 function renderMeta() {
   const parts = [];
   if (pool.label) parts.push(pool.label);
   if (pool.remainingText) parts.push(pool.remainingText);
-  if (pool.nextReset) {
-    const left = pool.nextReset - Date.now();
-    if (left > 0) {
-      const mins = Math.round(left / 60000);
-      parts.push(mins >= 60
-        ? `${Math.floor(mins / 60)}时${mins % 60}分后重置（${hhmm(pool.nextReset)}）`
-        : `${mins}分后重置（${hhmm(pool.nextReset)}）`);
-    } else {
-      parts.push(`${hhmm(pool.nextReset)} 重置`);
-    }
-  }
   if (parts.length) $('meta').textContent = parts.join(' · ');
 }
 
@@ -88,25 +103,27 @@ function pickPool(limits) {
   pool.usedPct = null;
   pool.remainingText = null;
   pool.nextReset = null;
+  pool.windowMs = null;
   if (!p) return;
 
-  pool.label = `${p.number}${UNIT[p.unit] ?? ''}窗口`;
+  pool.label = `${p.number}${UNIT_MS[p.unit] === 3600e3 ? '小时' : ''}窗口`;
   if (typeof p.percentage === 'number') {
     pool.usedPct = p.percentage;
   }
   if (typeof p.remaining === 'number' && typeof p.usage === 'number') {
     pool.remainingText = `剩 ${p.remaining}/${p.usage}`;
-  } else if (Array.isArray(p.usageDetails) && p.usageDetails.length) {
-    pool.remainingText = null; // 明细太长，进度条已够直观
   }
   if (typeof p.nextResetTime === 'number' && p.nextResetTime > 1e12) {
     pool.nextReset = p.nextResetTime;
+  }
+  if (UNIT_MS[p.unit] && p.number) {
+    pool.windowMs = UNIT_MS[p.unit] * p.number;
   }
 }
 
 async function refresh() {
   if (!cfg.GLM_KEY) {
-    $('meta').textContent = '未配置：请在 pack/config.js 填 GLM_KEY';
+    $('meta').textContent = '未配置：请在设置面板填 GLM API Key';
     schedule(60 * 1000);
     return;
   }
@@ -118,7 +135,8 @@ async function refresh() {
     ]);
 
     pickPool(quota?.limits);
-    renderBar();
+    renderUsageBar();
+    renderTimeBar();
     renderMeta();
 
     if (account) {
@@ -144,8 +162,8 @@ $('card').addEventListener('click', () => {
 });
 
 refresh();
-// 不重新拉数据，仅根据已存的 nextReset 每分钟刷新倒计时文字
-countdownTimer = setInterval(renderMeta, 60 * 1000);
+// 不重新拉数据，仅根据已存的 nextReset 每分钟刷新时间条
+countdownTimer = setInterval(renderTimeBar, 60 * 1000);
 
 // 设置面板换 Key 后热更新
 window.addEventListener('dw-config', (e) => {

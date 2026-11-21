@@ -4,10 +4,17 @@
   <meta charset="utf-8" />
   <link rel="stylesheet" href="../shared/style.css?v=3" />
   <style>
+    .row-main {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
     .time {
       font-size: 44px;
       font-weight: 600;
       line-height: 1.05;
+      cursor: move;
     }
     .time .sec {
       font-size: 20px;
@@ -15,21 +22,54 @@
       color: rgba(230, 236, 245, 0.5);
       margin-left: 6px;
     }
-    .date {
+    .time .ampm {
       font-size: 14px;
-      color: rgba(230, 236, 245, 0.65);
+      font-weight: 400;
+      color: rgba(230, 236, 245, 0.5);
+      margin-left: 6px;
+    }
+    .lunar-box {
+      text-align: right;
+      flex-shrink: 0;
+      line-height: 1.5;
+    }
+    .lunar-box .lunar-date {
+      font-size: 14px;
+      color: rgba(230, 236, 245, 0.85);
+    }
+    .lunar-box .lunar-year {
+      font-size: 11px;
+      color: rgba(230, 236, 245, 0.5);
+    }
+    .lunar-box .term {
+      font-size: 11px;
+      color: #e0af68;
+    }
+    .date {
+      font-size: 13px;
+      color: rgba(230, 236, 245, 0.6);
     }
   </style>
 </head>
 <body>
   <div class="card">
-    <div class="time" id="time" data-drag>--:--<span class="sec">--</span></div>
-    <div class="date" id="date">加载中…</div>
+    <div class="row-main">
+      <div>
+        <div class="time" id="time" data-drag>--:--<span class="sec">--</span></div>
+        <div class="date" id="date">加载中…</div>
+      </div>
+      <div class="lunar-box">
+        <div class="lunar-date" id="lunar-date">--</div>
+        <div class="lunar-year" id="lunar-year"></div>
+        <div class="term" id="term"></div>
+      </div>
+    </div>
   </div>
   <script src="../config.js?v=3"></script>
   <script src="../shared/cards.js?v=3"></script>
   <script src="../shared/zebar.bundle.js?v=3"></script>
   <script src="../shared/boot.js?v=3"></script>
+  <script src="../shared/solarlunar.min.js?v=3"></script>
   <script src="app.js?v=3"></script>
 </body>
 </html>

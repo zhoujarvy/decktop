@@ -9,7 +9,7 @@ window.DW_CARDS = [
   { "name": "system",       "title": "本机状态", "height": 112 },
   { "name": "clock",        "title": "时钟",     "height": 100 },
   { "name": "calendar",     "title": "日历",     "height": 240 },
-  { "name": "weather",      "title": "天气",     "height": 120 },
+  { "name": "weather",      "title": "天气",     "height": 144 },
   { "name": "glm-balance",  "title": "GLM 用量", "height": 108, "shell": "glm" },
   { "name": "nas",          "title": "NAS 状态", "height": 208, "shell": "nas" },
   { "name": "settings-bar", "title": "设置入口", "height": 36,  "fixed": true, "shell": "settings-launcher" },

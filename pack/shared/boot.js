@@ -30,6 +30,8 @@
       LAT: usr.lat !== undefined ? usr.lat : def.LAT,
       LON: usr.lon !== undefined ? usr.lon : def.LON,
       WATCH_CONTAINERS: usr.watch || def.WATCH_CONTAINERS || [],
+      CLOCK_24: !usr.clock || usr.clock.c24 !== false,
+      CLOCK_SECONDS: !usr.clock || usr.clock.seconds !== false,
     };
   }
 

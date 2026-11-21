@@ -7,31 +7,47 @@
     .main {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      gap: 10px;
+    }
+    .cur-icon {
+      font-size: 30px;
+      line-height: 1;
+      flex-shrink: 0;
     }
     .temp {
-      font-size: 34px;
+      font-size: 30px;
       font-weight: 600;
+      flex-shrink: 0;
     }
     .desc {
-      font-size: 14px;
+      font-size: 13px;
       color: rgba(230, 236, 245, 0.8);
+      margin-left: auto;
       text-align: right;
+      line-height: 1.45;
     }
     .days {
       display: flex;
       justify-content: space-between;
-      font-size: 12px;
+      font-size: 11px;
       color: rgba(230, 236, 245, 0.6);
     }
     .days .d {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2px;
+      gap: 1px;
+      width: 42px;
+    }
+    .days .d .ico {
+      font-size: 14px;
+      line-height: 1.2;
     }
     .days .d .hi {
       color: #e6ecf5;
+    }
+    .days .d .lo {
+      color: rgba(230, 236, 245, 0.45);
     }
   </style>
 </head>
@@ -39,6 +55,7 @@
   <div class="card">
     <div class="title" data-drag><span id="city">--</span></div>
     <div class="main">
+      <span class="cur-icon" id="cur-icon"></span>
       <div class="temp" id="temp">--°</div>
       <div class="desc">
         <div id="cond">加载中…</div>

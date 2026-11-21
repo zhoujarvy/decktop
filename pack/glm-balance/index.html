@@ -13,18 +13,27 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      margin: 2px 0;
+      margin: 1px 0;
     }
     .bar-row .bar {
       flex: 1;
       height: 8px;
       border-radius: 4px;
     }
+    .bar-row.time .bar {
+      height: 4px;
+    }
     .bar-row .pct {
       font-size: 16px;
       font-weight: 600;
       min-width: 46px;
       text-align: right;
+    }
+    .bar-row.time .pct {
+      font-size: 11px;
+      font-weight: 400;
+      min-width: 118px;
+      color: rgba(230, 236, 245, 0.6);
     }
     .meta {
       white-space: nowrap;
@@ -39,6 +48,10 @@
     <div class="bar-row">
       <div class="bar"><div id="usage-bar"></div></div>
       <span class="pct" id="usage-pct">--%</span>
+    </div>
+    <div class="bar-row time">
+      <div class="bar"><div id="time-bar"></div></div>
+      <span class="pct" id="time-label"></span>
     </div>
     <div class="meta" id="meta">加载中…</div>
   </div>

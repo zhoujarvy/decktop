@@ -186,6 +186,21 @@ document.querySelectorAll('#lang-row button').forEach((btn) => {
   });
 });
 
+// ---------- 时钟选项（即时生效） ----------
+function initClockToggles() {
+  const clock = readUser().clock || {};
+  document.querySelectorAll('#clock-toggles input[data-clock]').forEach((el) => {
+    el.checked = clock[el.dataset.clock] !== false;
+    el.addEventListener('change', () => {
+      const usr = readUser();
+      usr.clock = usr.clock || {};
+      usr.clock[el.dataset.clock] = el.checked;
+      writeUser(usr);
+    });
+  });
+}
+
 lang = readUser().lang || 'zh';
 initForm();
+initClockToggles();
 applyLang();
