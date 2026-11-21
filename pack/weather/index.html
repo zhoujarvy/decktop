@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
-  <link rel="stylesheet" href="../shared/style.css" />
+  <link rel="stylesheet" href="../shared/style.css?v=3" />
   <style>
     .main {
       display: flex;
@@ -37,7 +37,7 @@
 </head>
 <body>
   <div class="card">
-    <div class="title"><span id="city">--</span></div>
+    <div class="title" data-drag><span id="city">--</span></div>
     <div class="main">
       <div class="temp" id="temp">--°</div>
       <div class="desc">
@@ -47,9 +47,10 @@
     </div>
     <div class="days" id="days"></div>
   </div>
-  <script src="../config.js"></script>
-  <script src="../shared/cards.js"></script>
-  <script src="../shared/boot.js"></script>
-  <script src="app.js"></script>
+  <script src="../config.js?v=3"></script>
+  <script src="../shared/cards.js?v=3"></script>
+  <script src="../shared/zebar.bundle.js?v=3"></script>
+  <script src="../shared/boot.js?v=3"></script>
+  <script src="app.js?v=3"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
-  <link rel="stylesheet" href="../shared/style.css" />
+  <link rel="stylesheet" href="../shared/style.css?v=3" />
   <style>
     .net {
       margin-left: auto;
@@ -20,14 +20,15 @@
 </head>
 <body>
   <div class="card">
-    <div class="title">本机<span class="net" id="net"></span></div>
+    <div class="title" data-drag>本机<span class="net no-drag" id="net"></span></div>
     <div class="row"><span class="label">CPU</span><div class="bar"><div id="cpu-bar"></div></div><span class="pct" id="cpu-pct">--</span></div>
     <div class="row"><span class="label">内存</span><div class="bar"><div id="mem-bar"></div></div><span class="pct" id="mem-pct">--</span></div>
     <div class="meta" id="meta"></div>
   </div>
-  <script src="../config.js"></script>
-  <script src="../shared/cards.js"></script>
-  <script src="../shared/boot.js"></script>
-  <script type="module" src="app.js"></script>
+  <script src="../config.js?v=3"></script>
+  <script src="../shared/cards.js?v=3"></script>
+  <script src="../shared/zebar.bundle.js?v=3"></script>
+  <script src="../shared/boot.js?v=3"></script>
+  <script type="module" src="app.js?v=3"></script>
 </body>
 </html>

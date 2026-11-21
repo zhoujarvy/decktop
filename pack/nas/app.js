@@ -3,7 +3,8 @@
 //  /api/monitor/memory         -> data.mem.total/used (bytes)
 //  /api/storage/overview       -> data.array[] {mountpoint, fssize(总), frsize(空闲)}
 //  /api/docker/container/ls    -> data[] {Names[], State, Status}
-import * as zebar from 'https://esm.sh/zebar@3';
+// zebar 客户端 API 来自本地打包（shared/zebar.bundle.js），无外网依赖
+const zebar = window.ZEBAR;
 
 let cfg = window.DW ? window.DW.config() : (window.CONFIG || {});
 const CURL = 'C:\\Windows\\System32\\curl.exe';

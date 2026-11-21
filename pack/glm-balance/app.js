@@ -1,7 +1,8 @@
 // GLM Code Plan 用量进度条 + 余额：
 //  - GET /api/monitor/usage/quota/limit                  额度池（TOKENS_LIMIT = Code Plan 窗口）
 //  - GET /api/biz/account/query-customer-account-report  余额（小字）
-import * as zebar from 'https://esm.sh/zebar@3';
+// zebar 客户端 API 来自本地打包（shared/zebar.bundle.js），无外网依赖
+const zebar = window.ZEBAR;
 
 let cfg = window.DW ? window.DW.config() : (window.CONFIG || {});
 const CURL = 'C:\\Windows\\System32\\curl.exe';

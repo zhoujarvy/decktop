@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
-  <link rel="stylesheet" href="../shared/style.css" />
+  <link rel="stylesheet" href="../shared/style.css?v=3" />
   <style>
     .balance-mini {
       margin-left: auto;
@@ -35,16 +35,17 @@
 </head>
 <body>
   <div class="card clickable" id="card" title="点击立即刷新">
-    <div class="title">GLM · Code Plan<span class="balance-mini" id="balance"></span></div>
+    <div class="title" data-drag>GLM · Code Plan<span class="balance-mini no-drag" id="balance"></span></div>
     <div class="bar-row">
       <div class="bar"><div id="usage-bar"></div></div>
       <span class="pct" id="usage-pct">--%</span>
     </div>
     <div class="meta" id="meta">加载中…</div>
   </div>
-  <script src="../config.js"></script>
-  <script src="../shared/cards.js"></script>
-  <script src="../shared/boot.js"></script>
-  <script type="module" src="app.js"></script>
+  <script src="../config.js?v=3"></script>
+  <script src="../shared/cards.js?v=3"></script>
+  <script src="../shared/zebar.bundle.js?v=3"></script>
+  <script src="../shared/boot.js?v=3"></script>
+  <script type="module" src="app.js?v=3"></script>
 </body>
 </html>

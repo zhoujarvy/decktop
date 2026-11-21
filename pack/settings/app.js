@@ -1,6 +1,7 @@
 // 设置面板：语言 / 卡片开关 / 城市（geocoding 解析）/ GLM Key / NAS 配置
 // 保存 -> localStorage(dw.config) -> 各卡片经 storage 事件/轮询热生效
-import * as zebar from 'https://esm.sh/zebar@3';
+// zebar 客户端 API 来自本地打包（shared/zebar.bundle.js），无外网依赖
+const zebar = window.ZEBAR;
 
 const LS_KEY = 'dw.config';
 const $ = (id) => document.getElementById(id);
@@ -144,6 +145,16 @@ async function save() {
 $('save').addEventListener('click', save);
 $('close').addEventListener('click', () => {
   zebar.currentWidget().close();
+});
+
+// 清除自定义排列，所有卡片回到自动堆叠布局
+$('reset-layout').addEventListener('click', () => {
+  const usr = readUser();
+  delete usr.layout;
+  localStorage.setItem(LS_KEY, JSON.stringify(usr));
+  const status = $('status');
+  status.className = 'status ok';
+  status.textContent = t('status.reset');
 });
 
 document.querySelectorAll('#lang-row button').forEach((btn) => {

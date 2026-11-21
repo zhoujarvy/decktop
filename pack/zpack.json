@@ -230,8 +230,8 @@
           "anchor": "top_right",
           "offsetX": "-16px",
           "offsetY": "16px",
-          "width": "360px",
-          "height": "520px",
+          "width": "380px",
+          "height": "640px",
           "monitorSelection": {
             "type": "primary"
           }

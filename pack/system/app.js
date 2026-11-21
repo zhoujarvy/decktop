@@ -1,5 +1,6 @@
 // 本机状态：zebar 内置 provider（cpu / memory / network / host），自动推送更新
-import * as zebar from 'https://esm.sh/zebar@3';
+// zebar 客户端 API 来自本地打包（shared/zebar.bundle.js），无外网依赖
+const zebar = window.ZEBAR;
 
 const providers = zebar.createProviderGroup({
   host: { type: 'host' },

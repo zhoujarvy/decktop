@@ -68,7 +68,7 @@ def build():
                 # 默认预设位置：全启用时的堆叠位置（面板固定在顶部）；
                 # 实际位置由 shared/boot.js 按启用情况动态计算
                 'offsetY': '%dpx' % (TOP if is_panel else y),
-                'width': '360px' if is_panel else '340px',
+                'width': '380px' if is_panel else '340px',
                 'height': '%dpx' % height,
                 'monitorSelection': {'type': 'primary'},
             }],
