@@ -246,6 +246,26 @@
     return s;
   }
 
+  // ---------- 打开指定卡片（三级调用回退，规避 zebar invoke 参数风格差异） ----------
+  function openWidget(name) {
+    var z = window.ZEBAR;
+    if (!z) return Promise.reject(new Error('no ZEBAR'));
+    var p1 = z.rawInvoke('start_widget_preset', {
+      pack_id: 'desktop-widgets',
+      widget_name: name,
+      preset_name: 'default',
+      is_preview: false,
+    });
+    var p2 = z.rawInvoke('start_widget_preset', {
+      packId: 'desktop-widgets',
+      widgetName: name,
+      presetName: 'default',
+      isPreview: false,
+    });
+    var p3 = z.startWidgetPreset('desktop-widgets', name, 'default', false);
+    return p1.catch(function () { return p2; }).catch(function () { return p3; });
+  }
+
   // ---------- 暴露给卡片 app ----------
   window.DW = {
     key: LS_KEY,
@@ -254,6 +274,7 @@
     userConfig: readUser,
     place: place,
     t: t,
+    openWidget: openWidget,
   };
 
   place();
