@@ -34,13 +34,13 @@ function applyLang() {
   renderToggles();
 }
 
-// 即时切换语言并持久化
+// 即时切换语言并持久化（必须先写入再渲染：翻译函数读的是存储值）
 function switchLang(next) {
   lang = next;
-  applyLang();
   const usr = readUser();
   usr.lang = lang;
   writeUser(usr);
+  applyLang();
 }
 
 // ---------- 卡片开关（即时生效） ----------
