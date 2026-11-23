@@ -166,6 +166,7 @@ async function pollFast() {
   } finally {
     probing = false;
     render();
+    fitHeight();
   }
 }
 
@@ -199,7 +200,15 @@ async function pollSlow() {
       ok: c.State === 'running',
     }));
     render();
+    fitHeight();
   } catch { /* 静默，下一轮 */ }
+}
+
+// 内容高度自适应：渲染后量取自然高度并同步窗口（下方卡片自动重排）
+function fitHeight() {
+  if (!window.DW) return;
+  var h = document.body.scrollHeight;
+  if (h > 40) window.DW.setHeight(h);
 }
 
 // CPU/内存轮询（在线离线统一 10s，离线时相当于持续探活）

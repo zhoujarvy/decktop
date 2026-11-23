@@ -63,8 +63,10 @@
     var usableH = (window.screen.availHeight || window.screen.height) - 16;
     var x0 = window.screen.width - RIGHT_MARGIN - CARD_WIDTH;
 
+    var dyn = readUser().heights || {};
     enabledStack().forEach(function (c) {
-      if (y + c.height > usableH && y > TOP_MARGIN) {
+      var h = typeof dyn[c.name] === 'number' ? dyn[c.name] : c.height;
+      if (y + h > usableH && y > TOP_MARGIN) {
         col += 1;
         y = TOP_MARGIN;
       }
@@ -72,9 +74,9 @@
         x: x0 - col * (CARD_WIDTH + GAP),
         y: y,
         w: CARD_WIDTH,
-        h: c.height,
+        h: h,
       };
-      y += c.height + GAP;
+      y += h + GAP;
     });
 
     var ov = readUser().layout || {};
@@ -268,6 +270,26 @@
     return p1.catch(function () { return p2; }).catch(function () { return p3; });
   }
 
+  // ---------- 卡片自适应高度：量出内容高度 -> 调整窗口尺寸并广播 ----------
+  function setHeight(contentH) {
+    var self = me();
+    if (!self || self.stack === false) return Promise.resolve();
+    var h = Math.round(Math.max(96, Math.min(420, contentH)));
+    var usr = readUser();
+    usr.heights = usr.heights || {};
+    var prev = typeof usr.heights[CARD] === 'number'
+      ? usr.heights[CARD] : self.height;
+    if (Math.abs(h - prev) <= 4) return Promise.resolve();
+    usr.heights[CARD] = h;
+    localStorage.setItem(LS_KEY, JSON.stringify(usr));
+    lastRaw = localStorage.getItem(LS_KEY);
+    if (!window.ZEBAR) return Promise.resolve();
+    var w = window.ZEBAR.currentWidget().tauriWindow;
+    return w.setSize(new window.ZEBAR.LogicalSize(CARD_WIDTH, h))
+      .then(function () { return place(); })
+      .catch(function () {});
+  }
+
   // ---------- 暴露给卡片 app ----------
   window.DW = {
     key: LS_KEY,
@@ -277,6 +299,7 @@
     place: place,
     t: t,
     openWidget: openWidget,
+    setHeight: setHeight,
   };
 
   place();

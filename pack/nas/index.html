@@ -2,11 +2,18 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
-  <link rel="stylesheet" href="../shared/style.css?v=3" />
+  <link rel="stylesheet" href="../shared/style.css?v=4" />
   <style>
+    /* 高度自适应：内容撑开，窗口尺寸由 DW.setHeight 同步 */
+    html,
+    body {
+      height: auto;
+    }
     .card {
+      height: auto;
+      min-height: 100%;
       justify-content: flex-start;
-      gap: 5px;
+      gap: 6px;
       padding: 10px 14px;
     }
     .status-line {
@@ -68,10 +75,10 @@
     </div>
     <div class="guide" id="guide" style="display:none"></div>
   </div>
-  <script src="../config.js?v=3"></script>
-  <script src="../shared/cards.js?v=3"></script>
-  <script src="../shared/zebar.bundle.js?v=3"></script>
-  <script src="../shared/boot.js?v=3"></script>
-  <script type="module" src="app.js?v=3"></script>
+  <script src="../config.js?v=4"></script>
+  <script src="../shared/cards.js?v=4"></script>
+  <script src="../shared/zebar.bundle.js?v=4"></script>
+  <script src="../shared/boot.js?v=4"></script>
+  <script type="module" src="app.js?v=4"></script>
 </body>
 </html>
