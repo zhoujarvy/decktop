@@ -22,6 +22,15 @@ SHELL_TEMPLATES = {
             '(biz/account/query-customer-account-report|monitor/usage/quota/limit)$'
         ),
     },
+    # 天气走和风天气（国内直连；curl 带 API Key 头避免 CORS）
+    'weather': {
+        'program': 'C:\Windows\System32\curl.exe',
+        'argsRegex': (
+            '^-s -4 -m [0-9]+ -H X-QW-Api-Key: [A-Za-z0-9]{8,64} '
+            '(https://geoapi\.qweather\.com/v2/city/lookup\?location=[^&]+&number=1'
+            '|https://devapi\.qweather\.com/v7/weather/(now|7d)\?location=[A-Za-z0-9]{2,20})$'
+        ),
+    },
     'nas': {
         'program': 'C:\\Windows\\System32\\curl.exe',
         # 支持主机名与 https（外网经 Lucky/Tailscale 反代时使用）

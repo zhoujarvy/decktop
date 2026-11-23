@@ -96,51 +96,27 @@ function initForm() {
   const def = window.CONFIG || {};
 
   $('city').value = usr.city || def.CITY || '';
+  $('weather-key').value = usr.weatherKey ?? def.WEATHER_KEY ?? '';
   $('glm-key').value = usr.glmKey ?? def.GLM_KEY ?? '';
   $('nas-host').value = usr.nasHost || def.NAS_HOST || '';
   $('nas-token').value = usr.nasToken ?? def.FNOS_TOKEN ?? '';
   $('watch').value = (usr.watch || def.WATCH_CONTAINERS || []).join(',');
 }
 
-// ---------- 城市经纬度解析 ----------
-async function resolveCity(city) {
-  const res = await fetch(
-    `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}` +
-      `&count=1&language=zh&format=json`,
-  );
-  if (!res.ok) throw new Error(`geocoding HTTP ${res.status}`);
-  const data = await res.json();
-  if (!data.results || !data.results.length) {
-    throw new Error(t('geo.notfound', { c: city }));
-  }
-  const r = data.results[0];
-  return { lat: r.latitude, lon: r.longitude };
-}
-
-// ---------- 保存（城市/密钥/NAS 文本配置） ----------
+// ---------- 保存（城市/密钥/NAS 文本配置；城市由天气卡自行解析为 LocationID） ----------
 async function save() {
   const btn = $('save');
   const status = $('status');
   btn.disabled = true;
 
-  const before = readUser();
-
   try {
+    const before = readUser();
     const city = $('city').value.trim();
-    let lat, lon;
-    const cityChanged =
-      city !== (before.city || (window.CONFIG || {}).CITY || '');
-    if (cityChanged && city) {
-      status.className = 'status';
-      status.textContent = t('status.resolving');
-      const geo = await resolveCity(city);
-      lat = geo.lat;
-      lon = geo.lon;
-    }
 
     const next = {
       ...before,
       city,
+      weatherKey: $('weather-key').value.trim(),
       glmKey: $('glm-key').value.trim(),
       nasHost: $('nas-host').value.trim() || '192.168.1.100',
       nasToken: $('nas-token').value.trim(),
@@ -149,9 +125,9 @@ async function save() {
         .map((s) => s.trim())
         .filter(Boolean),
     };
-    if (lat !== undefined) {
-      next.lat = lat;
-      next.lon = lon;
+    // 换城市后清掉旧的 LocationID 缓存，让天气卡重新解析
+    if (city !== (before.city || (window.CONFIG || {}).CITY || '')) {
+      delete next.weatherLoc;
     }
     writeUser(next);
 

@@ -3,6 +3,9 @@ window.CONFIG = {
   // 智谱开放平台 API Key，格式 "{id}.{secret}"，从 open.bigmodel.cn 控制台获取
   GLM_KEY: '',
 
+  // 和风天气 API Key（console.qweather.com 免费创建，每天 1000 次）
+  WEATHER_KEY: '',
+
   // FNOS-API 的 Bearer Token（NAS 上安装 FNOS-API 后获得）
   FNOS_TOKEN: '',
 

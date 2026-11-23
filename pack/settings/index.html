@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
-  <link rel="stylesheet" href="../shared/style.css?v=4" />
+  <link rel="stylesheet" href="../shared/style.css?v=6" />
   <style>
     .card {
       justify-content: flex-start;
@@ -172,10 +172,14 @@
     <div class="section" data-i18n="section.cards">卡片显示</div>
     <div class="toggles" id="toggles"></div>
 
-    <div class="section" data-i18n="section.weather">天气</div>
+    <div class="section" data-i18n="section.weather">天气（和风天气）</div>
     <div class="field">
-      <span class="name" data-i18n="field.city">城市（保存时自动解析经纬度）</span>
+      <span class="name" data-i18n="field.city">城市</span>
       <input type="text" id="city" data-i18n-ph="field.city.ph" />
+    </div>
+    <div class="field">
+      <span class="name" data-i18n="field.weatherkey">API Key（console.qweather.com 免费创建）</span>
+      <input type="password" id="weather-key" data-i18n-ph="field.weatherkey.ph" />
     </div>
 
     <div class="section">GLM</div>
@@ -204,11 +208,11 @@
     <div class="reset-btn" id="reset-layout" data-i18n="btn.resetLayout">恢复自动排列卡片</div>
     <div class="status" id="status"></div>
   </div>
-  <script src="../config.js?v=4"></script>
-  <script src="../shared/cards.js?v=4"></script>
-  <script src="../shared/i18n.js?v=4"></script>
-  <script src="../shared/zebar.bundle.js?v=4"></script>
-  <script src="../shared/boot.js?v=4"></script>
-  <script type="module" src="app.js?v=4"></script>
+  <script src="../config.js?v=6"></script>
+  <script src="../shared/cards.js?v=6"></script>
+  <script src="../shared/i18n.js?v=6"></script>
+  <script src="../shared/zebar.bundle.js?v=6"></script>
+  <script src="../shared/boot.js?v=6"></script>
+  <script type="module" src="app.js?v=6"></script>
 </body>
 </html>
