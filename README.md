@@ -73,7 +73,25 @@ printf "import * as zebar from 'zebar';\nimport { LogicalPosition, PhysicalPosit
 npx esbuild entry.mjs --bundle --minify --format=iife --outfile=../pack/shared/zebar.bundle.js
 ```
 
-换机器部署：
+## 安装（给其他用户）
+
+前置：Windows 10/11 + [zebar](https://github.com/glzr-io/zebar)（`winget install glzr-io.zebar`）
+
+**方式一：克隆本仓库**
+
+```bat
+git clone https://github.com/zhoujarvy/decktop
+cd decktop
+install.bat
+```
+
+**方式二：zebar Marketplace**（上架后）
+
+zebar 托盘 → Marketplace → 搜索 `decktop` → Install。
+
+各卡片数据源可选：时钟/日历/本机状态开箱即用；天气在设置面板改城市即可；GLM 卡需智谱 API Key；NAS 卡需飞牛 fnOS + FNOS-API（卡片和设置面板内有引导文案）。升级：`git pull` 后重启 zebar。
+
+## 开发部署（换机器/源码方式）
 
 ```bat
 mklink /J "%USERPROFILE%\.glzr\zebar\decktop" "<repo>\pack"

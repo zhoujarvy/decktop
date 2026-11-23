@@ -72,7 +72,7 @@ def build():
                 'height': '%dpx' % height,
                 'monitorSelection': {'type': 'primary'},
             }],
-            'includeFiles': ['*.js', '**/*.html', '**/*.css', '**/*.js'],
+            'includeFiles': ['*.js', '*.png', '**/*.html', '**/*.css', '**/*.js', '**/*.png'],
         }
         if card.get('shell'):
             widget['privileges'] = {
@@ -87,7 +87,11 @@ def build():
         '$schema': 'https://raw.githubusercontent.com/glzr-io/zebar/main/resources/zpack-schema.json',
         'name': 'decktop',
         'version': '0.2.0',
-        'description': '个人桌面小组件：本机/时钟/日历/天气/GLM/NAS（插件化，可视化配置）',
+        'description': '桌面小组件套件：本机状态/时钟农历/日历/天气7天/GLM Code Plan 用量/NAS 监控，'
+                       '插件化卡片 + 可视化设置（中英双语），卡片可拖动磁吸排列',
+        'tags': ['dashboard', 'clock', 'calendar', 'weather', 'monitor', 'chinese'],
+        'previewImages': ['./resources/preview-1.png'],
+        'repositoryUrl': 'https://github.com/zhoujarvy/decktop',
         'widgets': widgets,
     }
 
