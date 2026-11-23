@@ -139,7 +139,7 @@
         "shellCommands": [
           {
             "program": "C:\\Windows\\System32\\curl.exe",
-            "argsRegex": "^-s -4 -m [0-9]+ -H X-QW-Api-Key: [A-Za-z0-9]{8,64} (https://geoapi\\.qweather\\.com/v2/city/lookup\\?location=[^&]+&number=1|https://devapi\\.qweather\\.com/v7/weather/(now|7d)\\?location=[A-Za-z0-9]{2,20})$"
+            "argsRegex": "^-s -4 --compressed -m [0-9]+ -H X-QW-Api-Key: [A-Za-z0-9]{8,64} https://devapi\\.qweather\\.com/v7/weather/(now|7d)\\?location=[A-Za-z0-9.,-]{2,32}$|^-s -4 --compressed -m [0-9]+ https://geocoding-api\\.open-meteo\\.com/v1/search\\?name=[^&]+&count=1&language=zh&format=json$"
           }
         ]
       }

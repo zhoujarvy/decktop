@@ -1,12 +1,12 @@
-// 天气：和风天气（国内直连，curl -4 带 X-QW-Api-Key 头规避 CORS/IPv6 问题）
-//  - GET geoapi.qweather.com/v2/city/lookup   城市 -> LocationID（缓存到 dw.config）
-//  - GET devapi.qweather.com/v7/weather/now   实况
-//  - GET devapi.qweather.com/v7/weather/7d    7 天预报
+// 天气：和风天气（国内直连 devapi，curl --compressed 解 gzip；--compressed 规避 IPv6）
+//  - 城市解析：geocoding-api.open-meteo.com（免 Key，国内可达）-> 经纬度
+//  - 实况：devapi.qweather.com/v7/weather/now?location=lon,lat
+//  - 7天：devapi.qweather.com/v7/weather/7d?location=lon,lat
 (function () {
   let cfg = window.DW ? window.DW.config() : (window.CONFIG || {});
   const CURL = 'C:\\Windows\\System32\\curl.exe';
 
-  // 和风 icon 代码 -> 图标（按段映射 + 少量特例）
+  // 和风 icon 代码 -> 图标
   function qIcon(code) {
     code = String(code);
     if (code === '100' || code === '150') return '☀️';
@@ -43,33 +43,34 @@
     setTimeout(refresh, failStreak <= 3 ? 30 * 1000 : 5 * 60 * 1000);
   }
 
-  async function qw(url) {
-    const out = await window.ZEBAR.shellExec(CURL, [
-      '-s', '-4', '-m', '15',
-      '-H', `X-QW-Api-Key: ${cfg.WEATHER_KEY}`,
-      url,
-    ]);
-    if (out.code !== 0) throw new Error(`curl exit ${out.code}`);
-    const json = JSON.parse(out.stdout);
-    if (json.code !== '200') {
-      throw new Error(`和风 ${json.code}${json.error ? ' ' + json.error : ''}`);
-    }
-    return json;
+  function parseJson(text) {
+    if (!text || !text.trim()) throw new Error('空响应(接口路径或参数有误)');
+    return JSON.parse(text);
   }
 
-  // 城市名 -> LocationID（成功后缓存进 dw.config.weatherLoc）
+  async function curl(url, key) {
+    const args = ['-s', '-4', '--compressed', '-m', '15'];
+    if (key) args.push('-H', `X-QW-Api-Key: ${key}`);
+    args.push(url);
+    const out = await window.ZEBAR.shellExec(CURL, args);
+    if (out.code !== 0) throw new Error(`curl exit ${out.code}`);
+    return parseJson(out.stdout);
+  }
+
+  // 城市名 -> 经纬度（open-meteo geocoding，免 Key），缓存到 dw.config.weatherLoc
   async function resolveLocation() {
     const city = (cfg.CITY || '').trim();
     if (!city) throw new Error('未设置城市');
-    const geo = await qw(
-      `https://geoapi.qweather.com/v2/city/lookup?location=${encodeURIComponent(city)}&number=1`,
+    const geo = await curl(
+      `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=zh&format=json`,
     );
-    const hit = geo.location && geo.location[0];
+    const hit = geo.results && geo.results[0];
     if (!hit) throw new Error(`找不到城市“${city}”`);
+    const loc = { coords: `${hit.longitude},${hit.latitude}`, name: hit.name };
     const usr = window.DW.userConfig();
-    usr.weatherLoc = { id: hit.id, name: hit.name };
+    usr.weatherLoc = loc;
     localStorage.setItem(window.DW.key, JSON.stringify(usr));
-    return usr.weatherLoc;
+    return loc;
   }
 
   async function refresh() {
@@ -84,9 +85,11 @@
       $('city').textContent = cfg.CITY || loc.name;
 
       const [now, week] = await Promise.all([
-        qw(`https://devapi.qweather.com/v7/weather/now?location=${loc.id}`),
-        qw(`https://devapi.qweather.com/v7/weather/7d?location=${loc.id}`),
+        curl(`https://devapi.qweather.com/v7/weather/now?location=${loc.coords}`, cfg.WEATHER_KEY),
+        curl(`https://devapi.qweather.com/v7/weather/7d?location=${loc.coords}`, cfg.WEATHER_KEY),
       ]);
+      if (now.code !== '200') throw new Error(`和风 ${now.code}`);
+      if (week.code !== '200') throw new Error(`和风 ${week.code}`);
       failStreak = 0;
 
       const n = now.now;

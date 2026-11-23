@@ -22,13 +22,14 @@ SHELL_TEMPLATES = {
             '(biz/account/query-customer-account-report|monitor/usage/quota/limit)$'
         ),
     },
-    # 天气走和风天气（国内直连；curl 带 API Key 头避免 CORS）
+    # 天气走和风天气（devapi 强制 gzip，curl 需 --compressed；城市解析用 open-meteo geocoding）
     'weather': {
         'program': 'C:\Windows\System32\curl.exe',
         'argsRegex': (
-            '^-s -4 -m [0-9]+ -H X-QW-Api-Key: [A-Za-z0-9]{8,64} '
-            '(https://geoapi\.qweather\.com/v2/city/lookup\?location=[^&]+&number=1'
-            '|https://devapi\.qweather\.com/v7/weather/(now|7d)\?location=[A-Za-z0-9]{2,20})$'
+            '^-s -4 --compressed -m [0-9]+ -H X-QW-Api-Key: [A-Za-z0-9]{8,64} '
+            'https://devapi\.qweather\.com/v7/weather/(now|7d)\?location=[A-Za-z0-9.,-]{2,32}$'
+            '|^-s -4 --compressed -m [0-9]+ '
+            'https://geocoding-api\.open-meteo\.com/v1/search\?name=[^&]+&count=1&language=zh&format=json$'
         ),
     },
     'nas': {
